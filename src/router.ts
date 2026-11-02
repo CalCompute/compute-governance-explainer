@@ -49,7 +49,8 @@ function countView() {
   try {
     const gc = (window as any).goatcounter;
     if (!gc?.count) return; // script not loaded yet; the load handler below retries
-    gc.count({ path, title: path.slice(1) });
+    const site = location.hostname.startsWith("vashishthdoshi") ? "" : "/calcompute";
+    gc.count({ path: site + path, title: (site + path).slice(1) });
     lastPath = path;
   } catch { /* analytics must never break the page */ }
 }

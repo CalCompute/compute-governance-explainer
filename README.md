@@ -1,4 +1,4 @@
-# Compute Stack Explorer
+# Compute Governance Explorer
 
 An interactive explainer of who owns, hosts, runs, funds, governs and allocates shared AI and HPC compute. It was built to inform the governance section of the CalCompute framework report under California SB 53 (Government Code section 11546.8).
 
