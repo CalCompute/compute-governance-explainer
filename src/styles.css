@@ -68,6 +68,8 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .logo-slot.has-img { background: #FFFFFF; border-style: solid; border-color: var(--line) }
 .logo-slot img { width: 100%; height: 100%; object-fit: contain; padding: 2px }
 .brand-slot { width: 40px; height: 40px }
+.brand-slot.brand-logo { border: 0; border-radius: 8px; background: none }
+.brand-slot.brand-logo img { padding: 0 }
 
 /* controls */
 .btn { appearance: none; border: 1px solid var(--line-strong); background: var(--surface); color: var(--fg); border-radius: var(--radius); padding: 7px 14px; cursor: pointer; line-height: 1.3; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-style: normal }

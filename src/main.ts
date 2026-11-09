@@ -15,7 +15,9 @@ function applyUiText() {
   document.querySelectorAll<HTMLElement>("[data-ui]").forEach((el) => { const t = ui(el.dataset.ui!); if (t) el.textContent = t; });
   const name = ui("app.name", "Compute Stack Explorer");
   document.title = name;
-  $(".brand-slot").textContent = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+  const slot = $(".brand-slot"), brandLogo = D.logos["calcompute"];
+  if (brandLogo) { slot.innerHTML = `<img src="${esc(brandLogo)}" alt="">`; slot.classList.add("has-img", "brand-logo"); }
+  else slot.textContent = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
   $("#verifiedLine").textContent = `Data last verified ${D.lastVerified}`;
   const latest = D.changelog[0];
   $("#footerVersion").textContent = latest ? `Version ${latest.version} · ${latest.date}` : "";
