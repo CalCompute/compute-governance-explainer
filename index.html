@@ -25,7 +25,7 @@
       <li><a href="/statute/">Statute</a></li>
       <li><a href="/about/">About</a></li>
     </ul></nav>
-    <a href="/about/" class="btn">Suggest reading</a>
+    <a href="/#suggest" class="btn">Suggest or correct</a>
     <a href="/search/" class="lib-search">Search</a>
   </div>
 </header>
@@ -150,6 +150,15 @@
           <li><a href="mailto:team@CaliforniaCompute.org">Email</a></li>
           <li><a href="https://join.slack.com/t/calcompute/shared_invite/zt-4ept8frp0-s35_861eT5uQRwVQ8_Uk0A" target="_blank" rel="noopener"><img class="mark" src="/images/apps/slack.svg" alt="">Slack</a></li>
       </ul>
+      <form class="lib-newsletter" data-newsletter novalidate>
+        <label for="newsletter-email">Follow the Framework Report</label>
+        <p>Occasional email on the Consortium's progress. Nothing else.</p>
+        <div><input id="newsletter-email" name="email" type="email" required autocomplete="email" maxlength="254" placeholder="you@example.edu"><button type="submit" class="btn">Subscribe</button></div>
+        <label hidden aria-hidden="true">Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label>
+        <input type="hidden" name="page">
+        <div data-turnstile></div>
+        <p data-status aria-live="polite"></p>
+      </form>
     </div>
     <div>
       <h2>Report</h2>
@@ -174,7 +183,7 @@
     <div>
       <h2>Take part</h2>
       <ul>
-        <li><a href="/about/">Suggest reading</a></li>
+        <li><a href="/#suggest">Suggest or correct</a></li>
         <li><a href="/about/">About</a></li>
         <li><a href="/how-it-works/">How it works</a></li>
         <li><a href="https://californiacompute.org/" target="_blank" rel="noopener">CalCompute ↗</a></li>

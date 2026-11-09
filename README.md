@@ -52,6 +52,8 @@ The page lives on the Research Library's host but deploys from this repo. A Clou
 
 Because it shares the host, the page uses the library's fonts, wordmark and icons from the library's own paths (`/fonts/`, `/images/`, `/favicons/`); `npm run dev` proxies them from the live library. `index.html` and `src/chrome.css` carry a copy of the library's header and footer, from `library-site/src/layouts/Layout.astro`. When the library changes its header or footer, copy the change here.
 
+The footer's newsletter sign-up and every **Suggest a correction** button (the source sheet, an organization's panel, the line under the page) use the library's forms. The sign-up posts to `/api/subscribe` on this host, which the library's Worker answers; `src/forms.ts` is a copy of `library-site/src/lib/forms.js`. A correction button opens the library's Suggest or correct form, filled in with the item. A person reads every suggestion; nothing changes the workbook by itself. The workbook's `footer.issue` and `footer.issue.url` rows in UI Text are no longer read.
+
 ## License
 
 Code: MIT (`LICENSE`). Data and text: CC BY 4.0 (`LICENSE-DATA.md`). Logos remain the trademarks of their owners.

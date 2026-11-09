@@ -65,3 +65,15 @@ body {
 .lib-footer-bottom { max-width: 1200px; margin: 0 auto; padding: 1.5rem; display: flex; flex-direction: column; gap: .5rem; font-size: .75rem; line-height: 1rem; color: #9ca3af }
 .lib-footer-bottom p { margin: 0 }
 @media (min-width: 640px) { .lib-footer-bottom { flex-direction: row; justify-content: space-between } }
+
+/* The newsletter sign-up in the footer (library-site src/components/NewsletterForm.astro, dark). */
+.lib-newsletter { margin-top: 1.5rem; max-width: 24rem }
+.lib-newsletter label { display: block; font-weight: 500; color: #fff }
+.lib-newsletter label[hidden] { display: none }
+.lib-newsletter p { margin: 0; font-size: .75rem; line-height: 1rem; color: #9ca3af }
+.lib-newsletter div:has(> input) { margin-top: .5rem; display: flex; gap: .5rem }
+.lib-newsletter input[type="email"] { min-width: 0; flex: 1; border-radius: .375rem; padding: .375rem .625rem; font: inherit; color: #fff; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.3) }
+.lib-newsletter input[type="email"]::placeholder { color: #9ca3af }
+.lib-newsletter .btn { padding: .25rem 1rem; color: #fff; border-color: #fff; background: transparent }
+.lib-newsletter .btn:hover { background: #fff; color: #002033 }
+.lib-newsletter [data-status] { margin-top: .25rem; color: #d1d5db }

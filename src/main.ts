@@ -3,6 +3,7 @@ import "./styles.css";
 import { AMAP, D, ui } from "./data";
 import { nav, parseHash, syncHash } from "./router";
 import { S, type Tab } from "./state";
+import { correctionHref, initNewsletter } from "./forms";
 import { $, closeOverlay, esc, initGlossary, overlay, overlayOpen, toast } from "./ui";
 import { hideExplore, initExplore, setApproach, showExplore } from "./views/explore";
 import { renderStart } from "./views/start";
@@ -15,7 +16,7 @@ function applyUiText() {
   $("#verifiedLine").textContent = `Data last verified ${D.lastVerified}`;
   const latest = D.changelog[0];
   $("#footerVersion").textContent = latest ? `Version ${latest.version} · ${latest.date}` : "";
-  $("#footerIssue").innerHTML = `<a href="${esc(ui("footer.issue.url", "#"))}" target="_blank" rel="noopener">${esc(ui("footer.issue", "Report an issue"))}</a>`;
+  $("#footerIssue").innerHTML = `<a href="${correctionHref("the whole explorer")}">Suggest a correction</a>`;
 }
 
 function go(tab: Tab) {
@@ -68,6 +69,7 @@ function init() {
   applyUiText();
   initExplore();
   initGlossary();
+  initNewsletter();
   document.querySelectorAll<HTMLElement>(".tab").forEach((b) => b.addEventListener("click", () => go(b.dataset.tab as Tab)));
   $("#copyLinkBtn").addEventListener("click", copyLink);
   const brand = $(".brand"); brand.setAttribute("role", "link"); brand.tabIndex = 0; brand.title = ui("start.tab", "Start here");

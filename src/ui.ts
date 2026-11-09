@@ -1,3 +1,4 @@
+import { correctionHref } from "./forms";
 import { D, GLOSS, LN, SRC, citing } from "./data";
 import type { FlowType, Status } from "./types";
 
@@ -85,7 +86,8 @@ export function openSource(id: string, factText?: string) {
      <dl class="kv"><dt>Publisher</dt><dd>${esc(s.publisher)}</dd>${s.published ? `<dt>Published</dt><dd>${esc(s.published)}</dd>` : ""}
      <dt>Type</dt><dd>${s.type === "primary" ? "Primary source" : "Secondary source"}</dd><dt>Last checked</dt><dd>${esc(s.accessed)}</dd></dl>
      ${factText ? `<div class="card"><b>The fact you selected</b><p>${esc(factText)}</p></div>` : ""}
-     <span class="group-label">Cited for</span><ul class="plain-list">${cited.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul>`,
+     <span class="group-label">Cited for</span><ul class="plain-list">${cited.map((t) => `<li>${esc(plain(t))}</li>`).join("")}</ul>
+     <p><a class="btn" href="${esc(correctionHref(factText ? `${factText} (source: ${s.title})` : `source ${s.title}`, s.url))}" target="_blank" rel="noopener">Suggest a correction</a></p>`,
     "Source detail", "sheet");
 }
 

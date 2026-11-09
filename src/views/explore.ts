@@ -1,3 +1,4 @@
+import { correctionHref } from "../forms";
 import { AMAP, APPROACHES, CAT, D, LN, MAIN_LAYERS, SRC, approachLabel, heldCount, isBundled, ordered, ui } from "../data";
 import { nav, syncHash } from "../router";
 import { Stage } from "../stage";
@@ -116,7 +117,8 @@ function renderDrawer() {
     <div class="panel-section"><span class="group-label">Facts</span>${e.facts.map((f) => `<button type="button" class="fact" data-src="${f.sourceIds[0]}" data-fact="${esc(f.fact)}"><span><span class="fact-layer">${esc(LN(D.layers.find((l) => l.id === f.layer)!.order).name)}</span>${esc(f.fact)}</span>${statusChip(f.status)}</button>`).join("")}</div>
     <div class="panel-section"><span class="group-label">${esc(cat?.name ?? "")}: motivation and cost</span><div class="profile"><div><b>Wants</b>${esc(cat?.wants ?? "")}</div><div><b>Pays or risks</b>${esc(cat?.paysOrRisks ?? "")}</div><div><b>Lever</b>${esc(cat?.lever ?? "")}</div></div>
       <button type="button" class="btn" data-gostake="${e.category}" style="align-self:flex-start">See ${esc((cat?.name ?? "").toLowerCase())} across all approaches</button></div>
-    <div class="panel-section"><span class="group-label">Flows</span>${ins.length || outs.length ? `<ul class="plain-list">${ins.map((f) => fl(f, "in")).join("")}${outs.map((f) => fl(f, "out")).join("")}</ul>` : "<p>No flows recorded.</p>"}</div>`;
+    <div class="panel-section"><span class="group-label">Flows</span>${ins.length || outs.length ? `<ul class="plain-list">${ins.map((f) => fl(f, "in")).join("")}${outs.map((f) => fl(f, "out")).join("")}</ul>` : "<p>No flows recorded.</p>"}</div>
+    <div class="panel-section"><a class="btn" style="align-self:flex-start" href="${esc(correctionHref(`${e.name} in ${a.name}`))}" target="_blank" rel="noopener">Suggest a correction</a></div>`;
 }
 
 function exportImage() {
