@@ -1,23 +1,17 @@
-import "@fontsource/carlito/400.css";
-import "@fontsource/carlito/700.css";
-import "@fontsource/carlito/400-italic.css";
+import "./chrome.css";
 import "./styles.css";
 import { AMAP, D, ui } from "./data";
 import { nav, parseHash, syncHash } from "./router";
 import { S, type Tab } from "./state";
 import { $, closeOverlay, esc, initGlossary, overlay, overlayOpen, toast } from "./ui";
-import { getStage, hideExplore, initExplore, setApproach, showExplore } from "./views/explore";
+import { hideExplore, initExplore, setApproach, showExplore } from "./views/explore";
 import { renderStart } from "./views/start";
 import { closePresenter, presenterOpen, renderJourneys, step, stopPlay, togglePlay } from "./views/journeys";
 import { renderChangelog, renderCompare, renderSpectrum, renderStakeholders } from "./views/pages";
 
 function applyUiText() {
   document.querySelectorAll<HTMLElement>("[data-ui]").forEach((el) => { const t = ui(el.dataset.ui!); if (t) el.textContent = t; });
-  const name = ui("app.name", "Compute Stack Explorer");
-  document.title = name;
-  const slot = $(".brand-slot"), brandLogo = D.logos["calcompute"];
-  if (brandLogo) { slot.innerHTML = `<img src="${esc(brandLogo)}" alt="">`; slot.classList.add("has-img", "brand-logo"); }
-  else slot.textContent = name.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
+  $("#year").textContent = String(new Date().getFullYear());
   $("#verifiedLine").textContent = `Data last verified ${D.lastVerified}`;
   const latest = D.changelog[0];
   $("#footerVersion").textContent = latest ? `Version ${latest.version} · ${latest.date}` : "";
@@ -53,18 +47,6 @@ function copyLink() {
   try { navigator.clipboard.writeText(url).then(() => toast("Link copied"), fallback); } catch { fallback(); }
 }
 
-/* ---------- theme ---------- */
-type Theme = "system" | "light" | "dark";
-let theme: Theme = "system";
-function applyTheme(t: Theme) {
-  theme = t;
-  const root = document.documentElement;
-  if (t === "system") root.removeAttribute("data-theme"); else root.setAttribute("data-theme", t);
-  $("#themeBtn").textContent = `Theme: ${t[0].toUpperCase()}${t.slice(1)}`;
-  try { localStorage.setItem("cse-theme", t); } catch { /* storage may be unavailable */ }
-  getStage()?.recolor();
-}
-
 /* ---------- keyboard ---------- */
 function keys(e: KeyboardEvent) {
   if (e.key === "Escape") { if (presenterOpen()) { closePresenter(); return; } if (overlayOpen()) { closeOverlay(); return; } }
@@ -91,11 +73,6 @@ function init() {
   const brand = $(".brand"); brand.setAttribute("role", "link"); brand.tabIndex = 0; brand.title = ui("start.tab", "Start here");
   brand.addEventListener("click", () => go("start"));
   brand.addEventListener("keydown", (e) => { if (e.key === "Enter") go("start"); });
-  $("#themeBtn").addEventListener("click", () => { const order: Theme[] = ["system", "light", "dark"]; applyTheme(order[(order.indexOf(theme) + 1) % 3]); });
-  let saved: Theme = "system";
-  try { saved = (localStorage.getItem("cse-theme") as Theme) || "system"; } catch { /* ignore */ }
-  applyTheme(saved);
-  window.matchMedia?.("(prefers-color-scheme: dark)").addEventListener("change", () => { if (theme === "system") getStage()?.recolor(); });
   document.addEventListener("keydown", keys);
   window.addEventListener("hashchange", () => { parseHash(); go(S.tab); });
   let rt = 0;

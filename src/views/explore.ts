@@ -127,7 +127,7 @@ function exportImage() {
   const file = `${a.id}-${S.view}.png`;
   overlay(
     `<div class="sheet-head"><h3>Export image</h3><button class="btn" data-close type="button">Close</button></div>
-     ${__PREVIEW__ ? `<p>Right-click or long-press the image to save it. The published site adds a download button.</p>` : `<p><a class="btn primary" href="${url}" download="${file}">Download ${esc(file)}</a></p>`}
+     <p><a class="btn btn-primary" href="${url}" download="${file}">Download ${esc(file)}</a></p>
      <img alt="Snapshot of ${esc(a.name)} in the ${VIEWS[S.view][0]} view" src="${url}">`,
     "Export image", "modal");
 }

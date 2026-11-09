@@ -1,8 +1,8 @@
 // Converts data/explorer-master.xlsx into src/generated/explorer.json.
 // Rows with public = "No" are dropped. Every reference is checked; the build fails on any broken link.
-// Usage: node scripts/build-data.mjs [--inline-logos]
+// Usage: node scripts/build-data.mjs
 import ExcelJS from "exceljs";
-import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readdirSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,7 +10,6 @@ const root = join(dirname(fileURLToPath(import.meta.url)), "..");
 const XLSX = join(root, "data", "explorer-master.xlsx");
 const OUT = join(root, "src", "generated", "explorer.json");
 const LOGO_DIR = join(root, "public", "assets", "logos");
-const inlineLogos = process.argv.includes("--inline-logos");
 const STATUS = new Set(["verified", "reported", "not public", "inferred"]);
 const errors = [];
 
@@ -66,11 +65,7 @@ if (existsSync(LOGO_DIR)) {
   for (const f of readdirSync(LOGO_DIR)) {
     const ext = extname(f).toLowerCase();
     if (![".svg", ".png", ".jpg", ".jpeg", ".webp"].includes(ext)) continue;
-    const base = f.slice(0, -ext.length);
-    if (inlineLogos) {
-      const mime = ext === ".svg" ? "image/svg+xml" : ext === ".png" ? "image/png" : ext === ".webp" ? "image/webp" : "image/jpeg";
-      logoFiles[base] = `data:${mime};base64,${readFileSync(join(LOGO_DIR, f)).toString("base64")}`;
-    } else logoFiles[base] = `assets/logos/${f}`;
+    logoFiles[f.slice(0, -ext.length)] = `/explorer/assets/logos/${f}`;
   }
 }
 

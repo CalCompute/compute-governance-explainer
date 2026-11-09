@@ -2,126 +2,191 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Compute Governance Explorer</title>
-<meta name="description" content="An explainer of who owns, hosts, runs, funds, governs and allocates shared AI and HPC compute, built to inform the CalCompute framework under California SB 53.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Compute Governance Explorer · CalCompute Research Library</title>
+<meta name="description" content="Who owns, hosts, runs, funds, governs and allocates shared AI and HPC compute, compared across real configurations, with every fact tagged and sourced.">
 <meta property="og:title" content="Compute Governance Explorer">
-<meta property="og:description" content="Who owns, hosts, runs, funds, governs and allocates shared AI compute.">
-<link rel="icon" type="image/png" href="./favicon.png">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta property="og:description" content="Who owns, hosts, runs, funds, governs and allocates shared AI and HPC compute.">
+<link rel="canonical" href="https://research.californiacompute.org/explorer/">
+<link rel="icon" href="/favicons/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicons/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/favicons/apple-touch-icon.png">
+<meta name="theme-color" content="#72cdf4">
 </head>
 <body>
-<a class="skip" href="#main">Skip to content</a>
-<header class="top">
-  <div class="top-inner">
-    <div class="brand">
-      <span class="logo-slot brand-slot" aria-hidden="true">CS</span>
-      <span class="brand-name" data-ui="app.name">Compute Governance Explorer</span>
-    </div>
-    <div class="top-meta">
-      <span class="verified" id="verifiedLine"></span>
-      <button class="btn" id="copyLinkBtn" type="button"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M7 4.5l1.2-1.2a2.6 2.6 0 013.7 3.7L10.7 8.2M9 11.5l-1.2 1.2a2.6 2.6 0 01-3.7-3.7L5.3 7.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy link</button>
-      <button class="btn" id="themeBtn" type="button">Theme: System</button>
-    </div>
+<!-- The Research Library's header and footer: a copy of CalCompute/library-site src/layouts/Layout.astro (see src/chrome.css). -->
+<header class="lib-header">
+  <div class="lib-header-inner">
+    <a href="/" class="lib-home" aria-label="CalCompute Research Library, home"><img src="/images/brand/calcompute-wordmark-sticker.svg" alt="CalCompute" height="36" width="161"><span>research</span></a>
+    <nav class="lib-nav"><ul>
+      <li><a href="/graph/">Graph</a></li>
+      <li><a href="/explorer/" aria-current="page">Explorer</a></li>
+      <li><a href="/library/">Library</a></li>
+      <li><a href="/statute/">Statute</a></li>
+      <li><a href="/about/">About</a></li>
+    </ul></nav>
+    <a href="/about/" class="btn">Suggest reading</a>
+    <a href="/search/" class="lib-search">Search</a>
   </div>
-  <nav class="tabs" role="tablist" aria-label="Sections">
-    <button class="tab" role="tab" data-tab="start" aria-controls="tab-start" data-ui="start.tab">Start here</button>
-    <button class="tab" role="tab" data-tab="explore" aria-controls="tab-explore">Explore</button>
-    <button class="tab" role="tab" data-tab="journeys" aria-controls="tab-journeys">Journeys</button>
-    <button class="tab" role="tab" data-tab="compare" aria-controls="tab-compare">Compare</button>
-    <button class="tab" role="tab" data-tab="stakeholders" aria-controls="tab-stakeholders">Stakeholders</button>
-    <button class="tab" role="tab" data-tab="spectrum" aria-controls="tab-spectrum">Bundling spectrum</button>
-    <button class="tab" role="tab" data-tab="changelog" aria-controls="tab-changelog">Changelog</button>
-  </nav>
 </header>
-<div class="notice"><div class="notice-inner"><span data-ui="notice"></span></div></div>
 
-<main id="main">
-  <section id="tab-start" data-panel="start" role="tabpanel" hidden><div class="wrap" id="startBody"></div></section>
-
-  <section id="tab-explore" data-panel="explore" role="tabpanel" hidden>
-    <div class="explore">
-      <aside class="panel panel-left" aria-label="Explorer controls">
-        <div class="panel-section">
-          <h1 data-ui="explore.title">Explore</h1>
-          <p class="muted" data-ui="explore.intro"></p>
-          <button class="btn" type="button" id="helpBtn" data-ui="start.helpbutton">How to read this</button>
-        </div>
-        <div class="panel-section">
-          <span class="group-label" id="viewsLabel">View</span>
-          <div class="views" role="group" aria-labelledby="viewsLabel" id="viewBtns"></div>
-        </div>
-        <div class="panel-section">
-          <span class="group-label">Approaches</span>
-          <div class="stack-y" id="apprCore"></div>
-          <span class="group-label spaced">Contrast cases</span>
-          <div class="stack-y" id="apprIntl"></div>
-        </div>
-        <div class="panel-section">
-          <span class="group-label">Flows</span>
-          <div class="stack-y" id="flowToggles"></div>
-        </div>
-        <div class="panel-section">
-          <span class="group-label">Display</span>
-          <label class="toggle"><input type="checkbox" id="optBundling"><svg viewBox="0 0 44 12" aria-hidden="true"><rect x="2" y="1" width="12" height="10" fill="var(--accent)"/><rect x="18" y="3" width="8" height="6" fill="none" stroke="var(--accent)"/><rect x="30" y="3" width="8" height="6" fill="none" stroke="var(--accent)"/></svg><span>Highlight bundling</span></label>
-          <label class="toggle"><input type="checkbox" id="optLabels" checked><svg viewBox="0 0 44 12" aria-hidden="true"><rect x="2" y="2" width="40" height="8" rx="2" fill="none" stroke="var(--accent)"/></svg><span>Show labels</span></label>
-          <div class="actions">
-            <button class="btn" type="button" id="resetViewBtn">Reset view</button>
-            <button class="btn" type="button" id="exportBtn">Export image</button>
-          </div>
-        </div>
-      </aside>
-      <div class="stage" id="stage">
-        <div class="stage-labels" id="stageLabels" aria-hidden="true"></div>
-        <div class="stage-head"><div class="stage-title" id="stageTitle"></div></div>
-        <div class="legend" id="legend" aria-hidden="true"></div>
-        <div class="stage-hint" id="stageHint" aria-hidden="true">Drag to turn · Scroll to zoom</div>
-        <div class="tip" id="tip" hidden></div>
-      </div>
-      <aside class="panel panel-right" id="drawer" aria-label="Detail" aria-live="polite"></aside>
+<main class="lib-main">
+<div class="explorer">
+  <div class="bar"><div class="bar-inner">
+    <span class="brand">Compute Governance Explorer</span>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button class="tab" role="tab" data-tab="start" aria-controls="tab-start" data-ui="start.tab">Start here</button>
+      <button class="tab" role="tab" data-tab="explore" aria-controls="tab-explore">Explore</button>
+      <button class="tab" role="tab" data-tab="journeys" aria-controls="tab-journeys">Journeys</button>
+      <button class="tab" role="tab" data-tab="compare" aria-controls="tab-compare">Compare</button>
+      <button class="tab" role="tab" data-tab="stakeholders" aria-controls="tab-stakeholders">Stakeholders</button>
+      <button class="tab" role="tab" data-tab="spectrum" aria-controls="tab-spectrum">Bundling spectrum</button>
+      <button class="tab" role="tab" data-tab="changelog" aria-controls="tab-changelog">Changelog</button>
+    </nav>
+    <div class="bar-meta">
+      <button class="btn" id="copyLinkBtn" type="button"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M7 4.5l1.2-1.2a2.6 2.6 0 013.7 3.7L10.7 8.2M9 11.5l-1.2 1.2a2.6 2.6 0 01-3.7-3.7L5.3 7.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy link</button>
     </div>
-  </section>
+  </div></div>
+  <div class="notice"><div class="notice-inner"><span data-ui="notice"></span><span class="verified" id="verifiedLine"></span></div></div>
 
-  <section id="tab-journeys" data-panel="journeys" role="tabpanel" hidden><div class="wrap">
-    <div class="page-head"><h2 data-ui="journeys.title">Journeys</h2><p data-ui="journeys.intro"></p></div>
-    <div class="purpose-key" id="purposeKey"></div>
-    <div class="jgrid" id="jgrid"></div>
-    <div id="journeyBody"></div>
-  </div></section>
+  <div id="main">
+    <section id="tab-start" data-panel="start" role="tabpanel" hidden><div class="wrap" id="startBody"></div></section>
 
-  <section id="tab-compare" data-panel="compare" role="tabpanel" hidden><div class="wrap">
-    <div class="page-head"><h2 data-ui="compare.title">Compare approaches</h2><p data-ui="compare.intro"></p></div>
-    <div class="chips" id="cmpChips"></div>
-    <p id="cmpNote" class="muted note"></p>
-    <div class="scroll-x"><div id="cmpGrid"></div></div>
-    <div class="cmp-summary" id="cmpSummary"></div>
-  </div></section>
+    <section id="tab-explore" data-panel="explore" role="tabpanel" hidden>
+      <div class="explore">
+        <aside class="panel panel-left" aria-label="Explorer controls">
+          <div class="panel-section">
+            <h1 data-ui="explore.title">Explore</h1>
+            <p class="muted" data-ui="explore.intro"></p>
+            <button class="btn" type="button" id="helpBtn" data-ui="start.helpbutton">How to read this</button>
+          </div>
+          <div class="panel-section">
+            <span class="group-label" id="viewsLabel">View</span>
+            <div class="views" role="group" aria-labelledby="viewsLabel" id="viewBtns"></div>
+          </div>
+          <div class="panel-section">
+            <span class="group-label">Approaches</span>
+            <div class="stack-y" id="apprCore"></div>
+            <span class="group-label spaced">Contrast cases</span>
+            <div class="stack-y" id="apprIntl"></div>
+          </div>
+          <div class="panel-section">
+            <span class="group-label">Flows</span>
+            <div class="stack-y" id="flowToggles"></div>
+          </div>
+          <div class="panel-section">
+            <span class="group-label">Display</span>
+            <label class="toggle"><input type="checkbox" id="optBundling"><svg viewBox="0 0 44 12" aria-hidden="true"><rect x="2" y="1" width="12" height="10" fill="var(--accent)"/><rect x="18" y="3" width="8" height="6" fill="none" stroke="var(--accent)"/><rect x="30" y="3" width="8" height="6" fill="none" stroke="var(--accent)"/></svg><span>Highlight bundling</span></label>
+            <label class="toggle"><input type="checkbox" id="optLabels" checked><svg viewBox="0 0 44 12" aria-hidden="true"><rect x="2" y="2" width="40" height="8" rx="2" fill="none" stroke="var(--accent)"/></svg><span>Show labels</span></label>
+            <div class="actions">
+              <button class="btn" type="button" id="resetViewBtn">Reset view</button>
+              <button class="btn" type="button" id="exportBtn">Export image</button>
+            </div>
+          </div>
+        </aside>
+        <div class="stage" id="stage">
+          <div class="stage-labels" id="stageLabels" aria-hidden="true"></div>
+          <div class="stage-head"><div class="stage-title" id="stageTitle"></div></div>
+          <div class="legend" id="legend" aria-hidden="true"></div>
+          <div class="stage-hint" id="stageHint" aria-hidden="true">Drag to turn · Scroll to zoom</div>
+          <div class="tip" id="tip" hidden></div>
+        </div>
+        <aside class="panel panel-right" id="drawer" aria-label="Detail" aria-live="polite"></aside>
+      </div>
+    </section>
 
-  <section id="tab-stakeholders" data-panel="stakeholders" role="tabpanel" hidden><div class="wrap">
-    <div class="page-head"><h2 data-ui="stakeholders.title">Stakeholders</h2><p data-ui="stakeholders.intro"></p></div>
-    <div class="chips" id="stkChips"></div>
-    <div id="stkBody"></div>
-  </div></section>
+    <section id="tab-journeys" data-panel="journeys" role="tabpanel" hidden><div class="wrap">
+      <div class="page-head"><h2 data-ui="journeys.title">Journeys</h2><p data-ui="journeys.intro"></p></div>
+      <div class="purpose-key" id="purposeKey"></div>
+      <div class="jgrid" id="jgrid"></div>
+      <div id="journeyBody"></div>
+    </div></section>
 
-  <section id="tab-spectrum" data-panel="spectrum" role="tabpanel" hidden><div class="wrap">
-    <div class="page-head"><h2 data-ui="spectrum.title">Bundling spectrum</h2><p data-ui="spectrum.intro"></p></div>
-    <div class="card"><div class="spec" id="spec"></div></div>
-    <div class="scroll-x spaced-top"><table class="table" id="specTable"></table></div>
-  </div></section>
+    <section id="tab-compare" data-panel="compare" role="tabpanel" hidden><div class="wrap">
+      <div class="page-head"><h2 data-ui="compare.title">Compare approaches</h2><p data-ui="compare.intro"></p></div>
+      <div class="chips" id="cmpChips"></div>
+      <p id="cmpNote" class="muted note"></p>
+      <div class="scroll-x"><div id="cmpGrid"></div></div>
+      <div class="cmp-summary" id="cmpSummary"></div>
+    </div></section>
 
-  <section id="tab-changelog" data-panel="changelog" role="tabpanel" hidden><div class="wrap">
-    <div class="page-head"><h2 data-ui="changelog.title">Changelog</h2><p data-ui="changelog.intro"></p></div>
-    <div class="log" id="log"></div>
-  </div></section>
+    <section id="tab-stakeholders" data-panel="stakeholders" role="tabpanel" hidden><div class="wrap">
+      <div class="page-head"><h2 data-ui="stakeholders.title">Stakeholders</h2><p data-ui="stakeholders.intro"></p></div>
+      <div class="chips" id="stkChips"></div>
+      <div id="stkBody"></div>
+    </div></section>
+
+    <section id="tab-spectrum" data-panel="spectrum" role="tabpanel" hidden><div class="wrap">
+      <div class="page-head"><h2 data-ui="spectrum.title">Bundling spectrum</h2><p data-ui="spectrum.intro"></p></div>
+      <div class="card"><div class="spec" id="spec"></div></div>
+      <div class="scroll-x spaced-top"><table class="table" id="specTable"></table></div>
+    </div></section>
+
+    <section id="tab-changelog" data-panel="changelog" role="tabpanel" hidden><div class="wrap">
+      <div class="page-head"><h2 data-ui="changelog.title">Changelog</h2><p data-ui="changelog.intro"></p></div>
+      <div class="log" id="log"></div>
+    </div></section>
+  </div>
+
+  <div class="explorer-meta">
+    <span id="footerVersion"></span>
+    <span id="footerIssue"></span>
+    <span data-ui="footer.license"></span>
+  </div>
+  <div id="overlayRoot"></div>
+  <noscript><p class="wrap">This explorer needs JavaScript. The master workbook, data/explorer-master.xlsx in CalCompute/compute-governance-explainer, holds the same data.</p></noscript>
+</div>
 </main>
 
-<footer><div class="wrap footer-inner">
-  <span id="footerVersion"></span>
-  <span id="footerIssue"></span>
-  <span data-ui="footer.license"></span>
-</div></footer>
-<div id="overlayRoot"></div>
-<noscript><p class="wrap">This explainer needs JavaScript. The master workbook in the repository holds the same data.</p></noscript>
+<footer class="lib-footer">
+  <div class="lib-footer-top">
+    <div class="lib-footer-brand">
+      <a href="/" aria-label="CalCompute Research Library, home"><img src="/images/brand/calcompute-icon-white.svg" alt="" width="40" height="40"><img src="/images/brand/calcompute-lettering-white.svg" alt="CalCompute" width="167" height="40"></a>
+      <p class="lib-footer-tagline">California's Public AI Cloud</p>
+      <ul class="lib-social">
+          <li><a href="https://www.linkedin.com/company/calcompute/" target="_blank" rel="noopener"><img class="mark invert" src="/images/apps/linkedin.svg" alt="">LinkedIn</a></li>
+          <li><a href="https://x.com/CalCompute" target="_blank" rel="noopener"><img class="mark invert" src="/images/apps/x.svg" alt="">X</a></li>
+          <li><a href="https://github.com/CalCompute" target="_blank" rel="noopener"><img class="mark invert" src="/images/apps/github.svg" alt="">GitHub</a></li>
+          <li><a href="mailto:team@CaliforniaCompute.org">Email</a></li>
+          <li><a href="https://join.slack.com/t/calcompute/shared_invite/zt-4ept8frp0-s35_861eT5uQRwVQ8_Uk0A" target="_blank" rel="noopener"><img class="mark" src="/images/apps/slack.svg" alt="">Slack</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Report</h2>
+      <ul>
+        <li><a href="/statute/">Statute</a></li>
+        <li><a href="/wiki/elements/statutory-requirements/">Statutory requirements</a></li>
+        <li><a href="/wiki/overview/">Overview</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Library</h2>
+      <ul>
+        <li><a href="/library/">Sources</a></li>
+        <li><a href="/graph/">Graph</a></li>
+        <li><a href="/explorer/">Compute Governance Explorer</a></li>
+        <li><a href="/wiki/index/">Index</a></li>
+        <li><a href="/#drive"><img class="mark" src="/images/apps/google-drive.svg" alt="">Drive</a></li>
+        <li><a href="/#github"><img class="mark invert" src="/images/apps/github.svg" alt="">GitHub</a></li>
+        <li><a href="/raw/">Originals (raw/)</a></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Take part</h2>
+      <ul>
+        <li><a href="/about/">Suggest reading</a></li>
+        <li><a href="/about/">About</a></li>
+        <li><a href="/how-it-works/">How it works</a></li>
+        <li><a href="https://californiacompute.org/" target="_blank" rel="noopener">CalCompute ↗</a></li>
+      </ul>
+    </div>
+  </div>
+  <hr>
+  <div class="lib-footer-bottom">
+    <p>© <span id="year">2026</span> CalCompute</p>
+    <p>This library is a tool to navigate and explore the research. The consortium does not use AI to write the CalCompute Framework Report.</p>
+  </div>
+</footer>
 <script data-goatcounter="https://vashishthdoshi.goatcounter.com/count" data-goatcounter-settings='{"no_onload": true}' async src="https://gc.zgo.at/count.js"></script>
 <script type="module" src="/src/main.ts"></script>
 </body>

@@ -2,6 +2,8 @@ import { D, GLOSS, LN, SRC, citing } from "./data";
 import type { FlowType, Status } from "./types";
 
 export const $ = <T extends HTMLElement = HTMLElement>(s: string) => document.querySelector(s) as T;
+/** The explorer's wrapper on the library page: its colour tokens live here, and pop-ups attach here so they inherit them. */
+export const host = () => document.querySelector<HTMLElement>(".explorer") ?? document.body;
 export const esc = (s: unknown) => String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
 /** Escapes text and turns [[term]] or [[term|shown text]] into glossary hover targets. */
@@ -41,7 +43,7 @@ export const layerList = (ls: number[]) => ls.map((L) => LN(L).name).join(", ");
 export function toast(msg: string) {
   const t = document.createElement("div");
   t.className = "toast"; t.setAttribute("role", "status"); t.textContent = msg;
-  document.body.appendChild(t); setTimeout(() => t.remove(), 2200);
+  host().appendChild(t); setTimeout(() => t.remove(), 2200);
 }
 
 export const FLOW_NAMES: Record<FlowType, string> = { request: "Requests", money: "Money", control: "Control", location: "Location" };
@@ -56,7 +58,7 @@ export function lineSwatch(type: FlowType): string {
   const dash = { request: "", money: 'stroke-dasharray="6 4"', control: 'stroke-dasharray="1.5 4" stroke-linecap="round"' }[type];
   return `<svg viewBox="0 0 44 12" aria-hidden="true"><line x1="2" y1="6" x2="42" y2="6" stroke="${type === "money" ? "var(--accent)" : "var(--accent-strong)"}" stroke-width="2" ${dash}/></svg>`;
 }
-export const cssVar = (n: string) => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+export const cssVar = (n: string) => getComputedStyle(host()).getPropertyValue(n).trim();
 
 /* ---------- overlays ---------- */
 let lastFocus: HTMLElement | null = null;
@@ -91,7 +93,7 @@ export function openSource(id: string, factText?: string) {
 export function initGlossary() {
   const card = document.createElement("div");
   card.className = "gloss-card"; card.hidden = true; card.setAttribute("role", "tooltip"); card.id = "glossCard";
-  document.body.appendChild(card);
+  host().appendChild(card);
   const show = (el: HTMLElement) => {
     const t = el.dataset.term || "";
     const g = GLOSS[t.toLowerCase()];

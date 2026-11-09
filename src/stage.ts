@@ -61,10 +61,9 @@ export class Stage {
   }
 
   private readColors() {
-    const c = (n: string) => new Color(cssVar(n) || "#1F3F85");
+    const c = (n: string) => new Color(cssVar(n) || "#005581");
     this.C = { strong: c("--accent-strong"), accent: c("--accent"), soft: c("--accent-soft"), faint: c("--accent-faint"), wash: c("--accent-wash") };
   }
-  recolor() { if (!this.ok) return; this.readColors(); this.nodes.forEach((n) => this.paintNode(n)); this.buildFlows(); this.buildScaffold(true); this.refreshDim(); }
   private resize() {
     const w = this.host.clientWidth, h = this.host.clientHeight;
     if (!w || !h) return;
@@ -185,9 +184,9 @@ export class Stage {
     this.buildScaffold(); this.buildFlows(); this.refreshDim();
   }
   private makeNode(slot: string): Node {
-    const mat = new MeshLambertMaterial({ color: 0x1f3f85, transparent: true, opacity: 1 });
+    const mat = new MeshLambertMaterial({ color: this.C.accent, transparent: true, opacity: 1 });
     const mesh = new Mesh<BoxGeometry | SphereGeometry, MeshLambertMaterial>(this.geo.box, mat);
-    const edges = new LineSegments(this.edgeGeo, new LineBasicMaterial({ color: 0x0b1b3f, transparent: true, opacity: 0.9 }));
+    const edges = new LineSegments(this.edgeGeo, new LineBasicMaterial({ color: this.C.strong, transparent: true, opacity: 0.9 }));
     mesh.add(edges); mesh.scale.set(0.001, 0.001, 0.001);
     const g = new Group(); g.add(mesh); this.world.add(g);
     const lbl = document.createElement("div"); lbl.className = "lbl"; this.labelHost.appendChild(lbl);

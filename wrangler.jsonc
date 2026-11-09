@@ -1,0 +1,9 @@
+{
+  // Cloudflare Worker that serves the built explorer (dist/explorer/) at research.californiacompute.org/explorer/.
+  // Cloudflare builds and deploys it from GitHub on every push to main (build command: npm run build).
+  // The route takes /explorer* on the Research Library's host; the library's own Worker serves everything else there.
+  "name": "compute-governance-explorer",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./dist", "html_handling": "auto-trailing-slash" },
+  "routes": [{ "pattern": "research.californiacompute.org/explorer*", "zone_name": "californiacompute.org" }]
+}

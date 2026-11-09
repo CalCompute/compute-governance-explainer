@@ -1,7 +1,7 @@
 import { AMAP, D, JMAP, PURPOSE, approachLabel } from "../data";
 import { syncHash } from "../router";
 import { RM, S } from "../state";
-import { $, FLOW_NAMES, esc, logo, openSource, statusChip } from "../ui";
+import { $, FLOW_NAMES, esc, host, logo, openSource, statusChip } from "../ui";
 import type { Journey } from "../types";
 
 let playing = false, timer = 0;
@@ -32,7 +32,7 @@ function renderInto(el: HTMLElement, isPresenting: boolean) {
     const p = PURPOSE[x.purposeId];
     return `<div class="friction"><span class="purpose">SB 53 · ${esc(p.name)}</span><span>${esc(x.text)}</span><span class="meta">${statusChip(x.status)}<button type="button" class="linklike" data-src="${x.sourceIds[0]}" data-fact="${esc(x.text)}">Source</button></span></div>`;
   };
-  const controls = `<div class="jcontrols"><button type="button" class="btn" data-jprev ${S.step === 0 ? "disabled" : ""}>Previous</button><button type="button" class="btn primary" data-jplay>${playing ? "Pause" : "Play"}</button><button type="button" class="btn" data-jnext ${S.step === j.steps.length - 1 ? "disabled" : ""}>Next</button>${isPresenting ? "" : `<button type="button" class="btn" data-jpresent>Presenter mode</button>`}<span class="muted" aria-live="polite">Step ${S.step + 1} of ${j.steps.length}</span></div>`;
+  const controls = `<div class="jcontrols"><button type="button" class="btn" data-jprev ${S.step === 0 ? "disabled" : ""}>Previous</button><button type="button" class="btn btn-primary" data-jplay>${playing ? "Pause" : "Play"}</button><button type="button" class="btn" data-jnext ${S.step === j.steps.length - 1 ? "disabled" : ""}>Next</button>${isPresenting ? "" : `<button type="button" class="btn" data-jpresent>Presenter mode</button>`}<span class="muted" aria-live="polite">Step ${S.step + 1} of ${j.steps.length}</span></div>`;
   if (isPresenting) {
     el.innerHTML = `<div class="p-top"><div><span class="muted">${esc(a.name)} · Step ${S.step + 1} of ${j.steps.length}</span><h2>${esc(j.persona)}, ${esc(j.context)}</h2></div><button type="button" class="btn" data-pexit>Exit presenter mode</button></div>
       <div class="journey"><div>${stack}</div><div><p class="p-caption">${esc(caption(j, S.step))}</p>${fr(S.step).map(fricHtml).join("")}${controls}<p class="muted">Use the arrow keys to move between steps, Space to play or pause, and Escape to exit.</p></div></div>`;
@@ -83,7 +83,7 @@ export const presenterOpen = () => !!presenter;
 function openPresenter() {
   const p = document.createElement("div");
   p.className = "presenter"; p.setAttribute("role", "dialog"); p.setAttribute("aria-modal", "true"); p.setAttribute("aria-label", "Journey presenter");
-  document.body.appendChild(p); presenter = p;
+  host().appendChild(p); presenter = p;
   renderInto(p, true);
   try { p.requestFullscreen?.().catch(() => {}); } catch { /* fullscreen is optional */ }
   p.querySelector<HTMLElement>("[data-pexit]")?.focus();
