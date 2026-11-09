@@ -15,7 +15,7 @@ Facts are tagged as verified, reported, not public, and inferred and are linked 
 All content comes from one workbook: `data/explorer-master.xlsx`. Only update the .xlsx for updates to the visuals.
 
 1. Edit the workbook.
-2. Commit it to `main`.
+2. Commit it to `cc-integration`, the branch Cloudflare builds.
 3. Cloudflare runs `npm run build`, which converts it to `src/generated/explorer.json`, checks every reference (organizations, layers, sources, journeys), type-checks the code and builds the page. If a reference is broken, the build log names the sheet and row and nothing deploys.
 
 Rows with `public = No` are left out of the site. The workbook itself is visible to anyone if the repository is public.
@@ -46,7 +46,9 @@ wrangler.jsonc                the Cloudflare Worker and its route
 
 ## How it is served
 
-The page lives on the Research Library's host but deploys from this repo. A Cloudflare Worker, `compute-governance-explorer` (`wrangler.jsonc`), serves `dist/` and takes the route `research.californiacompute.org/explorer*`. The library's own Worker (`CalCompute/library-site`) serves everything else on that host. Cloudflare builds and deploys this Worker on every push to `main`.
+The page lives on the Research Library's host but deploys from this repo. A Cloudflare Worker, `governance-explainer` (`wrangler.jsonc`), serves `dist/` and takes the route `research.californiacompute.org/explorer*`. The library's own Worker (`CalCompute/library-site`) serves everything else on that host. Cloudflare builds and deploys this Worker on every push to **`cc-integration`**, the branch that carries the library integration (this file, `wrangler.jsonc`, `src/chrome.css`, the `/explorer/` base path).
+
+`main` is the original standalone version of the explorer and is left as it was. `.github/workflows/deploy.yml` publishes it to GitHub Pages at https://calcompute.github.io/compute-governance-explainer/ on every push to `main`; it does not run for `cc-integration`.
 
 Because it shares the host, the page uses the library's fonts, wordmark and icons from the library's own paths (`/fonts/`, `/images/`, `/favicons/`); `npm run dev` proxies them from the live library. `index.html` and `src/chrome.css` carry a copy of the library's header and footer, from `library-site/src/layouts/Layout.astro`. When the library changes its header or footer, copy the change here.
 

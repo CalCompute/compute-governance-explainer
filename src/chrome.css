@@ -1,7 +1,7 @@
 /* The CalCompute Research Library's chrome, so this page looks like the library it is served inside
    (research.californiacompute.org/explorer/). Copied from CalCompute/library-site: src/styles/global.css (fonts, page,
    .btn, .chip, .card) and src/layouts/Layout.astro (header and footer), with Tailwind's classes written out as plain CSS.
-   ponytail: a copy; re-copy when the library's layout changes. Upgrade path: library-site emits its chrome as a
+   A copy; re-copy when the library's layout changes. Upgrade path: library-site emits its chrome as a
    fragment at build and this build inlines it. Fonts and images load from the library's own paths on the same host. */
 @font-face { font-family: 'Kunst Grotesk'; src: url('/fonts/Kunst%20Grotesk%20Regular.woff2') format('woff2'); font-weight: 400; font-display: swap; }
 @font-face { font-family: 'Kunst Grotesk'; src: url('/fonts/Kunst%20Grotesk%20Medium.woff2') format('woff2'); font-weight: 500 700; font-display: swap; }
