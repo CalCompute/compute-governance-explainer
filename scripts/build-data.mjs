@@ -2,7 +2,7 @@
 // Rows with public = "No" are dropped. Every reference is checked; the build fails on any broken link.
 // Usage: node scripts/build-data.mjs
 import ExcelJS from "exceljs";
-import { readdirSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
+import { readdirSync, readFileSync, writeFileSync, mkdirSync, existsSync } from "node:fs";
 import { join, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -57,6 +57,10 @@ const categories = rows(wb, "Stakeholders").map((r) => ({ id: r.category_id, nam
 const catIds = new Set(categories.map((c) => c.id));
 const approaches = rows(wb, "Approaches").map((r) => ({ id: r.approach_id, group: r.group, tag: r.tag, parentId: r.parent_id || "", name: r.name, kind: r.kind, location: r.location, recency: r.recency, moneyFlow: r.money_flow, summary: r.summary, sourceIds: ids(r.source_ids), logo: r.logo_file || "" }));
 const appIds = new Set(approaches.map((a) => a.id));
+// The Map view places a U.S. system by the state its location names (src/views/map.ts). "National ..." and contrast
+// cases have rows of their own.
+const stateNames = JSON.parse(readFileSync(new URL("../src/us-states.json", import.meta.url), "utf8")).states.map((s) => s.name);
+approaches.forEach((a) => { if (a.group !== "contrast" && !/^National\b/.test(a.location || "") && !stateNames.some((n) => (a.location || "").includes(n))) errors.push(`Approach ${a.id}: location "${a.location}" names no U.S. state; the Map view cannot place it. Name the state, or start the location with "National".`); });
 approaches.forEach((a) => { checkSrc(a.sourceIds, `Approaches ${a.id}`); if (a.parentId && !appIds.has(a.parentId)) errors.push(`Approach ${a.id}: unknown parent ${a.parentId}`); });
 
 // logos available on disk

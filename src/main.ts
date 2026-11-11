@@ -2,11 +2,12 @@ import "./chrome.css";
 import "./styles.css";
 import { AMAP, D, ui } from "./data";
 import { nav, parseHash, syncHash } from "./router";
-import { S, type Tab } from "./state";
+import { EMBED, S, type Tab } from "./state";
 import { correctionHref, initNewsletter } from "./forms";
 import { $, closeOverlay, esc, initGlossary, overlay, overlayOpen, toast } from "./ui";
 import { hideExplore, initExplore, setApproach, showExplore } from "./views/explore";
 import { renderStart } from "./views/start";
+import { renderMap } from "./views/map";
 import { closePresenter, presenterOpen, renderJourneys, step, stopPlay, togglePlay } from "./views/journeys";
 import { renderChangelog, renderCompare, renderSpectrum, renderStakeholders } from "./views/pages";
 
@@ -19,6 +20,15 @@ function applyUiText() {
   $("#footerIssue").innerHTML = `<a href="${correctionHref("the whole explorer")}">Suggest a correction</a>`;
 }
 
+// The header's small-screen menu (a <details>, as in library-site Layout.astro): close on Escape and on a click outside it.
+const libMenu = $("#libMenu") as HTMLDetailsElement;
+addEventListener("keydown", (e) => { if (e.key === "Escape" && libMenu.open) { libMenu.open = false; libMenu.querySelector("summary")!.focus(); } });
+addEventListener("click", (e) => { if (libMenu.open && !libMenu.contains(e.target as Node)) libMenu.open = false; });
+// The header's Search button opens the library's search dialog; a modified click follows the link.
+const libSearch = $("#libSearch") as HTMLDialogElement;
+$("#libSearchOpen").addEventListener("click", (e) => { if (e.metaKey || e.ctrlKey || e.shiftKey) return; e.preventDefault(); libSearch.showModal(); libSearch.querySelector("input")!.select(); });
+libSearch.addEventListener("click", (e) => { if (e.target === libSearch) libSearch.close(); });
+
 function go(tab: Tab) {
   S.tab = tab;
   document.querySelectorAll<HTMLElement>(".tab").forEach((b) => { const on = b.dataset.tab === tab; b.setAttribute("aria-selected", String(on)); b.tabIndex = on ? 0 : -1; });
@@ -27,6 +37,7 @@ function go(tab: Tab) {
   if (tab !== "journeys") stopPlay();
   if (tab === "start") renderStart();
   if (tab === "explore") showExplore();
+  if (tab === "map") renderMap();
   if (tab === "journeys") renderJourneys();
   if (tab === "compare") renderCompare();
   if (tab === "stakeholders") renderStakeholders();
@@ -65,6 +76,7 @@ function keys(e: KeyboardEvent) {
 }
 
 function init() {
+  if (EMBED) S.tab = "explore";
   parseHash();
   applyUiText();
   initExplore();

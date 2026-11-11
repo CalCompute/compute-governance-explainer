@@ -27,7 +27,7 @@ a:not(.btn):hover { color: var(--accent-soft) }
 
 /* the explorer's own bar: its name, the tabs (the library header's nav style), the data date and Copy link */
 .bar { position: sticky; top: 4rem; z-index: 15; background: rgba(255, 255, 255, .9); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line) }
-.bar-inner { max-width: 1200px; margin: 0 auto; padding: 8px 24px; display: flex; align-items: center; gap: 16px }
+.bar-inner { max-width: 1280px; margin: 0 auto; padding: 8px 16px; display: flex; align-items: center; gap: 16px }
 .brand { flex: none; font-weight: 700; color: var(--accent-strong); white-space: nowrap; cursor: pointer }
 .tabs { flex: 1 1 auto; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0 }
 .tabs::-webkit-scrollbar { display: none }
@@ -37,7 +37,7 @@ a:not(.btn):hover { color: var(--accent-soft) }
 .bar-meta { flex: none }
 .bar .btn { padding: .25rem .75rem; font-size: .875rem }
 .notice { background: var(--accent-wash); border-bottom: 1px solid var(--line) }
-.notice-inner { max-width: 1200px; margin: 0 auto; padding: 8px 24px; font-size: .875rem; color: var(--accent-strong); display: flex; flex-wrap: wrap; gap: 4px 24px }
+.notice-inner { max-width: 1280px; margin: 0 auto; padding: 8px 16px; font-size: .875rem; color: var(--accent-strong); display: flex; flex-wrap: wrap; gap: 4px 24px }
 .verified { margin-left: auto; color: var(--fg-2); white-space: nowrap }
 
 /* logo slots */
@@ -136,7 +136,7 @@ a:not(.btn):hover { color: var(--accent-soft) }
 .status-key { display: flex; gap: 10px; align-items: baseline }
 
 /* pages */
-.wrap { padding: 28px 24px 48px; max-width: 1200px; margin: 0 auto }
+.wrap { padding: 28px 16px 48px; max-width: 1280px; margin: 0 auto }
 .page-head { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; max-width: 75ch }
 .page-head p { color: var(--fg-2) }
 .card { padding: 18px }
@@ -227,7 +227,7 @@ a:not(.btn):hover { color: var(--accent-soft) }
 .copybox input { width: 100%; border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 6px 10px; background: var(--bg) }
 .toast { position: fixed; z-index: 90; left: 50%; bottom: max(20px, env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--accent); color: var(--on-accent); padding: 8px 16px; border-radius: var(--radius) }
 
-.explorer-meta { max-width: 1200px; margin: 0 auto; padding: 20px 24px; display: flex; gap: 20px; flex-wrap: wrap; color: var(--fg-2); font-size: .875rem }
+.explorer-meta { max-width: 1280px; margin: 0 auto; padding: 20px 16px; display: flex; gap: 20px; flex-wrap: wrap; color: var(--fg-2); font-size: .875rem }
 
 @media (max-width: 1180px) {
   .explore { grid-template-columns: 290px minmax(0, 1fr); height: auto }
@@ -313,3 +313,77 @@ a:not(.btn):hover { color: var(--accent-soft) }
   .srow .sq { grid-column: 2 }
 }
 }
+
+/* ?embed (index.html): the 3-D view alone, framed on the library home page. The page around it scrolls, so a vertical
+   swipe passes through and the wheel does not zoom (stage.ts); a sideways drag turns the model. */
+html.embed, html.embed body { background: transparent; overflow: hidden }
+html.embed .lib-header, html.embed .lib-footer, html.embed .bar, html.embed .notice, html.embed .panel,
+html.embed .explorer-meta { display: none }
+html.embed .lib-main { padding-top: 0 }
+html.embed .explorer .explore { display: block; height: 100vh; border: 0 }
+html.embed .explorer .stage { height: 100vh; min-height: 0; touch-action: pan-y }
+/* Only the name: the title's description line covers the top layers on a phone. */
+html.embed .explorer .stage-title { font-size: 0; padding: 4px 12px; display: flex; align-items: center; gap: 8px }
+html.embed .explorer .stage-title b { font-size: var(--fs-sub) }
+html.embed .stage-hint, html.embed.notitle .stage-title { display: none }
+/* Labels let the model show through. */
+html.embed .lbl:not(.layer), html.embed .explorer .stage-title { background: rgb(255 255 255 / .6) }
+
+/* ---------- Map view (views/map.ts): the documented systems by state ---------- */
+.map-grid { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start }
+.map-stage { padding: 16px }
+.us-map { display: block; width: 100%; height: auto }
+.us-map .st { fill: #e5e8ec; stroke: #ffffff; stroke-width: 1; stroke-linejoin: round }
+.us-map .st.has { fill: var(--accent-soft); cursor: pointer; outline: none }
+.us-map .st.has:hover, .us-map .st.has:focus-visible { fill: var(--accent) }
+.us-map .st.home { stroke: var(--accent-strong); stroke-width: 2 }
+.us-map .st.sel { fill: var(--accent); stroke: var(--accent-strong); stroke-width: 2.5 }
+.map-pin { pointer-events: none }
+.map-pin rect { fill: var(--surface); stroke: var(--line-strong) }
+.map-pin text { font-size: 12px; font-weight: 700; fill: var(--accent-strong) }
+.map-pin.sel rect { stroke: var(--accent-strong); stroke-width: 1.5 }
+.map-key { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: var(--fs-anno); margin-top: 8px }
+.map-key > span { display: inline-flex; align-items: baseline; gap: 6px }
+.map-key .sw { flex: none; width: 12px; height: 12px; border-radius: 3px; background: #e5e8ec; transform: translateY(1px) }
+.map-key .sw.has { background: var(--accent-soft) }
+.map-states { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 0; padding: 0 }
+.map-states .chip { display: inline-flex; gap: 6px; align-items: baseline; font-size: var(--fs-anno) }
+.map-states .chip[aria-pressed="false"] { opacity: 1 }
+.map-side { display: flex; flex-direction: column; gap: 12px }
+.map-side h3, .map-row h3 { font-size: var(--fs-sub); font-weight: 700 }
+.map-side h3 .muted { font-size: var(--fs-anno); font-weight: 400 }
+.map-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); padding: 14px; display: flex; flex-direction: column; gap: 10px }
+.map-card .row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap }
+.map-card .row > div { display: flex; flex-direction: column; min-width: 0; flex: 1 }
+.map-card .row .muted { font-size: var(--fs-anno) }
+.map-card p { color: var(--fg-2) }
+.map-card .logo-slot { height: 44px; min-width: 44px; font-size: var(--fs-anno) }
+.map-card .btn { font-size: var(--fs-anno); padding: .35rem .9rem }
+.map-card .btn-primary { color: var(--on-accent) } /* a button inherits its colour here; the primary one is white on blue */
+.map-row { margin-top: 28px }
+.map-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; margin-top: 10px }
+.map-foot { margin-top: 24px; font-size: var(--fs-anno); max-width: 75ch }
+@media (max-width: 900px) { .map-grid { grid-template-columns: minmax(0, 1fr) } }
+/* ?embed#map: the map and its key alone, in the library home page's frame. */
+html.embed .explorer #tab-map .wrap { padding: 0; max-width: none }
+html.embed .explorer #tab-map .page-head { display: none }
+.map-embed { box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr) 19rem; align-items: center; gap: 12px; height: 100vh; padding: 12px 16px; overflow: hidden }
+.map-embed .us-map { width: 100%; height: calc(100vh - 24px) }
+.explorer .map-embed a { text-decoration: none; color: var(--fg) }
+.map-embed a:hover .st.has, .map-embed a:focus-visible .st.has { fill: var(--accent) }
+.map-list { list-style: none; margin: 0; padding: 0; font-size: var(--fs-anno) }
+.map-list li { break-inside: avoid }
+.map-list a { display: grid; grid-template-columns: 2rem minmax(0, 1fr) auto; column-gap: 8px; align-items: baseline; padding: 2px 6px; border-radius: 4px; line-height: 1.3 }
+.map-list a:hover { background: var(--accent-wash) }
+.map-list a[aria-current] { background: var(--accent-faint); font-weight: 700 }
+.map-list b { color: var(--accent) }
+.map-list span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+.map-list .muted { font-size: .75rem; font-weight: 400; max-width: 9rem }
+.map-group { margin-top: 6px; padding: 2px 6px; font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--fg-2) }
+/* A frame as wide as a column: the map above its key, the key in two columns. */
+@media (max-width: 760px) {
+  .map-embed { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(0, 1fr) auto; align-items: stretch }
+  .map-embed .us-map { height: 100%; min-height: 0 }
+  .map-list { columns: 2; column-gap: 12px }
+}
+@media (max-width: 480px) { .map-list .muted { display: none } .map-list a { grid-template-columns: 1.8rem minmax(0, 1fr) } }

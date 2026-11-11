@@ -5,7 +5,7 @@ import {
   Raycaster, Scene, SphereGeometry, Vector2, Vector3, WebGLRenderer, type Material,
 } from "three";
 import { CAT, LN, isBundled, ordered } from "./data";
-import { RM, S, type View } from "./state";
+import { EMBED, RM, S, type View } from "./state";
 import { cssVar, esc, layerList, logo } from "./ui";
 import type { ApproachView, Ent, Flow } from "./types";
 
@@ -102,7 +102,7 @@ export class Stage {
     };
     cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
     cv.addEventListener("pointerleave", () => this.hideTip());
-    cv.addEventListener("wheel", (e) => { e.preventDefault(); this.camT.dist = clampDist(this.camT.dist * (1 + Math.sign(e.deltaY) * 0.08)); }, { passive: false });
+    if (!EMBED) cv.addEventListener("wheel", (e) => { e.preventDefault(); this.camT.dist = clampDist(this.camT.dist * (1 + Math.sign(e.deltaY) * 0.08)); }, { passive: false });
     cv.addEventListener("keydown", (e) => {
       const k = e.key; let used = true;
       if (k === "ArrowLeft") this.camT.az += 0.15; else if (k === "ArrowRight") this.camT.az -= 0.15;

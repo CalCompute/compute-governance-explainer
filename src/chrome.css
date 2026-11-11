@@ -31,18 +31,47 @@ body {
 /* header (Layout.astro) */
 .lib-header { position: fixed; top: 0; left: 0; right: 0; z-index: 20; background: rgba(255,255,255,.9); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); border-bottom: 1px solid #e5e7eb }
 .lib-header a { color: inherit; text-decoration: none }
-.lib-header-inner { max-width: 1200px; margin: 0 auto; padding: 0 1.5rem; height: 4rem; display: flex; align-items: center; gap: 1rem }
+.lib-header-inner { max-width: 1280px; margin: 0 auto; padding: 0 1rem; height: 4rem; display: flex; align-items: center; gap: 1rem }
 .lib-home { flex: none; display: flex; align-items: center; gap: .5rem }
 .lib-home img { display: block; height: 2.25rem; width: auto }
 .lib-home span { font-size: .75rem; line-height: 1rem; text-transform: uppercase; letter-spacing: .025em; color: #9ca3af }
-.lib-nav { margin-left: auto; min-width: 0; overflow-x: auto; overflow-y: hidden }
-.lib-nav ul { display: flex; justify-content: flex-end; gap: .25rem; margin: 0; padding: 0; list-style: none; font-size: .875rem; line-height: 1.25rem; white-space: nowrap }
+.lib-nav { margin-left: auto }
+.lib-nav ul { display: flex; gap: .25rem; margin: 0; padding: 0; list-style: none; font-size: .875rem; line-height: 1.25rem; white-space: nowrap }
 .lib-nav a { display: block; padding: .25rem .5rem; border-radius: .25rem; color: #4b5563 }
 .lib-nav a:hover { color: #111827 }
 .lib-nav a[aria-current="page"] { background: #005581; color: #fff }
-.lib-header .btn { flex: none; font-size: .875rem; white-space: nowrap }
-.lib-search { flex: none; font-size: .875rem; line-height: 1.25rem; border: 1px solid #d1d5db; border-radius: .375rem; padding: .25rem .625rem; color: #4b5563; white-space: nowrap }
+.lib-search { flex: none; display: inline-flex; align-items: center; gap: .375rem; font-size: .875rem; line-height: 1.25rem; border: 1px solid #d1d5db; border-radius: .25rem; padding: 0 .75rem 0 .5rem; height: calc(clamp(0.85rem, 0.82rem + 0.15vw, 0.9375rem) + 1rem + 4px); color: #4b5563; white-space: nowrap }
 .lib-search:hover { color: #111827 }
+/* Phones: the icon alone (its label stays for screen readers), so the menu button fits */
+@media (max-width: 639px) {
+  .lib-header-inner { gap: .75rem }
+  .lib-search { padding: 0 .625rem }
+  .lib-search span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap }
+}
+/* The search dialog (Layout.astro #search) */
+.lib-search-dialog { width: min(680px, calc(100vw - 2rem)); margin: 5rem auto 0; padding: 0; border: 0; border-radius: .75rem; box-shadow: 0 20px 25px -5px rgba(0,0,0,.1), 0 8px 10px -6px rgba(0,0,0,.1) }
+.lib-search-dialog::backdrop { background: rgba(0,0,0,.3) }
+.lib-search-dialog form { padding: .75rem; border-bottom: 1px solid #e5e7eb }
+.lib-search-dialog input { width: 100%; font: inherit; font-size: 1.125rem; padding: .375rem .5rem; border: 0; outline: none }
+.lib-search-dialog p { margin: 0; padding: .5rem 1rem; font-size: .75rem; color: #6b7280 }
+/* "Take the survey": the same button as CaliforniaCompute.org's header (library-site global.css .nav-cta). */
+.nav-cta { display: inline-flex; align-items: center; flex: none; white-space: nowrap; line-height: 1; font-size: clamp(0.85rem, 0.82rem + 0.15vw, 0.9375rem); font-weight: 600; padding: 0.5rem 1rem; border: 2px solid #005581; border-radius: 4px; background: #005581; color: #fff !important }
+.nav-cta:focus-visible { outline: 3px solid #1295d8; outline-offset: 3px }
+/* The menu below 1025px: a <details> whose sheet drops under the bar. */
+.lib-menu { display: none }
+.lib-menu summary { list-style: none; cursor: pointer; padding: .5rem; margin-right: -.5rem; border-radius: .25rem; color: #4b5563 }
+.lib-menu summary::-webkit-details-marker { display: none }
+.lib-menu summary svg { display: block }
+.lib-menu-sheet { position: absolute; left: 0; right: 0; top: 4rem; background: #fff; border-bottom: 1px solid #e5e7eb; box-shadow: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1) }
+.lib-menu-sheet ul { max-width: 1280px; margin: 0 auto; padding: .5rem 1rem; list-style: none }
+.lib-menu-sheet li a:not(.nav-cta) { display: block; padding: .625rem 0; color: #374151 }
+.lib-menu-sheet a[aria-current="page"] { font-weight: 500; color: #005581 }
+.lib-menu-cta { margin-top: .5rem; padding: .75rem 0; border-top: 1px solid #e5e7eb }
+@media (max-width: 1024px) {
+  .lib-nav, .lib-header-inner > .nav-cta { display: none }
+  .lib-search { margin-left: auto }
+  .lib-menu { display: block }
+}
 .lib-main { padding-top: 4rem }
 
 /* footer (Layout.astro) */
@@ -50,30 +79,41 @@ body {
 .lib-footer a { color: inherit; text-decoration: none; display: inline-flex; align-items: center; gap: .375rem }
 .lib-footer a:hover { color: #fff }
 .lib-footer ul { margin: 0; padding: 0; list-style: none }
-.lib-footer-top { max-width: 1200px; margin: 0 auto; padding: 2.5rem 1.5rem 2rem; display: grid; gap: 2rem }
-@media (min-width: 640px) { .lib-footer-top { grid-template-columns: 2fr 1fr 1fr 1fr } }
-.lib-footer-brand img { display: block; height: 2.5rem; width: auto }
-.lib-footer-brand a { gap: .5rem }
-.lib-footer-tagline { margin: .75rem 0 0 }
-.lib-social { margin-top: 1rem !important; display: flex; flex-wrap: wrap; gap: .5rem 1rem }
+.lib-footer-top { max-width: 1280px; margin: 0 auto; padding: 4rem 1rem 2.5rem; display: flex; flex-wrap: wrap; gap: 2rem }
+.lib-footer-top > div { flex: 1 1 8rem }
+.lib-footer-top > .lib-footer-brand { flex-basis: 100%; order: 1 }
+@media (min-width: 1025px) {
+  .lib-footer-top { display: grid; gap: 2.5rem; grid-template-columns: 2fr 1fr 1fr 1fr }
+  .lib-footer-top > .lib-footer-brand { order: 0 }
+}
 .lib-footer img.mark { height: .875rem; width: auto }
 .lib-footer img.invert { filter: invert(1) }
 .lib-footer h2 { margin: 0 0 .75rem; font-size: .875rem; font-weight: 500; color: #fff }
 .lib-footer li + li { margin-top: .375rem }
-.lib-social li + li { margin-top: 0 }
 .lib-footer hr { margin: 0; border: 0; border-top: 1px solid rgba(189,227,246,.3) }
-.lib-footer-bottom { max-width: 1200px; margin: 0 auto; padding: 1.5rem; display: flex; flex-direction: column; gap: .5rem; font-size: .75rem; line-height: 1rem; color: #9ca3af }
+.lib-footer-bottom { max-width: 1280px; margin: 0 auto; padding: 1.5rem 1rem 2rem; display: flex; flex-direction: column; gap: .5rem; font-size: .75rem; line-height: 1rem; color: #9ca3af }
 .lib-footer-bottom p { margin: 0 }
 @media (min-width: 640px) { .lib-footer-bottom { flex-direction: row; justify-content: space-between } }
 
-/* The newsletter sign-up in the footer (library-site src/components/NewsletterForm.astro, dark). */
-.lib-newsletter { margin-top: 1.5rem; max-width: 24rem }
-.lib-newsletter label { display: block; font-weight: 500; color: #fff }
-.lib-newsletter label[hidden] { display: none }
-.lib-newsletter p { margin: 0; font-size: .75rem; line-height: 1rem; color: #9ca3af }
-.lib-newsletter div:has(> input) { margin-top: .5rem; display: flex; gap: .5rem }
-.lib-newsletter input[type="email"] { min-width: 0; flex: 1; border-radius: .375rem; padding: .375rem .625rem; font: inherit; color: #fff; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.3) }
-.lib-newsletter input[type="email"]::placeholder { color: #9ca3af }
-.lib-newsletter .btn { padding: .25rem 1rem; color: #fff; border-color: #fff; background: transparent }
-.lib-newsletter .btn:hover { background: #fff; color: #002033 }
-.lib-newsletter [data-status] { margin-top: .25rem; color: #d1d5db }
+/* The footer's first column: CaliforniaCompute.org's, copied from library-site global.css (.fb; from the main site's Footer.astro and NewsletterForm.astro, footer variant), value
+   for value, so the two sites' footers open the same way. Only the typeface is this site's. The explorer's chrome.css
+   carries a copy; change all three together. */
+.fb { --fb-sm: clamp(0.85rem, 0.82rem + 0.15vw, 0.9375rem); display: flex; flex-direction: column; gap: 0.5rem; }
+.fb-mark { --mark: calc(clamp(1.25rem, 1.18rem + 0.35vw, 1.5rem) * 1.5); align-self: flex-start; display: inline-flex; align-items: center; gap: calc(var(--mark) * 60 / 453); color: #fff; transition: color 150ms ease; }
+.fb-mark img { display: block; height: calc(var(--mark) * 512 / 454); width: auto; }
+.fb-mark span { display: block; height: var(--mark); aspect-ratio: 1892 / 453; background: currentColor; -webkit-mask: url('/images/brand/calcompute-lettering-white.svg') center / contain no-repeat; mask: url('/images/brand/calcompute-lettering-white.svg') center / contain no-repeat; }
+.fb .fb-mark:hover { color: #ffb511; }
+.fb-tagline { margin: 0; max-width: 36ch; font-size: var(--fb-sm); line-height: 1.75; color: rgba(255, 255, 255, 0.75); }
+.fb .newsletter { margin-top: 1rem; display: flex; flex-direction: column; gap: 0.5rem; width: 100%; max-width: 28rem; }
+.fb .newsletter label[for] { font-size: var(--fb-sm); font-weight: 600; color: #fff; }
+.fb .newsletter-row { display: flex; gap: 0.5rem; align-items: center; }
+.fb .newsletter input[type='email'] { flex: 1; min-width: 0; font: inherit; font-size: var(--fb-sm); padding: 0.5rem 1rem; border-radius: 9999px; border: 1px solid rgba(255, 255, 255, 0.35); background: rgba(255, 255, 255, 0.1); color: #fff; }
+.fb .newsletter input[type='email']::placeholder { color: rgba(255, 255, 255, 0.55); }
+.fb .newsletter button { font: inherit; font-size: var(--fb-sm); font-weight: 600; line-height: 1; white-space: nowrap; cursor: pointer; padding: 0.5rem 1rem; border-radius: 9999px; border: 2px solid rgba(255, 255, 255, 0.6); background: transparent; color: #fff; transition: background-color 150ms ease, border-color 150ms ease; }
+.fb .newsletter button:hover { background: rgba(255, 255, 255, 0.15); border-color: #fff; }
+.fb .newsletter [data-status] { margin: 0; min-height: 1.25em; font-size: var(--fb-sm); color: rgba(255, 255, 255, 0.75); }
+.fb-social { margin-top: 1.5rem; display: flex; align-items: center; justify-content: space-between; }
+.fb-social > div { display: flex; align-items: center; gap: 0.75rem; }
+.fb-social a { display: flex; align-items: center; color: #bde3f6; transition: color 150ms ease; }
+.fb-social a:hover { color: #fff; }
+.fb-social svg, .fb-social img { min-width: 20px; height: 20px; width: auto; }

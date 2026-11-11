@@ -5,6 +5,7 @@ An interactive explainer of who owns, hosts, runs, funds, governs and allocates 
 It is published as a page of the CalCompute Research Library: https://research.californiacompute.org/explorer/
 
 * **Explore**: sixteen configurations (seven approaches, five variants, four international contrast cases) in two WebGL views, Strata and Constellation, with request, money, control and location flows.
+* **Map**: the same systems by the U.S. state that hosts each one, with the national and international cases beside it.
 * **Journeys**: eleven user stories that follow a request down the stack, with friction points tagged to SB 53's purposes.
 * **Compare**, **Stakeholders**, **Bundling spectrum** and **Changelog**.
 
@@ -38,6 +39,7 @@ scripts/build-data.mjs        workbook → JSON, with reference checks
 src/generated/explorer.json   generated; do not edit by hand
 src/stage.ts                  WebGL views (three.js)
 src/views/                    explore, journeys, compare, stakeholders, spectrum, changelog
+scripts/us-map.mjs            makes src/us-states.json, the Map view's state shapes (run once)
 src/styles.css                the explorer's layout, in the Research Library's colours and type
 src/chrome.css                a copy of the Research Library's header, footer and base styles
 public/assets/logos/          logo files
@@ -51,6 +53,8 @@ The page lives on the Research Library's host but deploys from this repo. A Clou
 `main` is the original standalone version of the explorer and is left as it was. `.github/workflows/deploy.yml` publishes it to GitHub Pages at https://calcompute.github.io/compute-governance-explainer/ on every push to `main`; it does not run for `cc-integration`.
 
 Because it shares the host, the page uses the library's fonts, wordmark and icons from the library's own paths (`/fonts/`, `/images/`, `/favicons/`); `npm run dev` proxies them from the live library. `index.html` and `src/chrome.css` carry a copy of the library's header and footer, from `library-site/src/layouts/Layout.astro`. When the library changes its header or footer, copy the change here.
+
+The library's home page frames the 3-D view from `/explorer/?embed`. That flag hides the header, footer, tab bar and side panels, keeps only the stage with the approach's logo and name, lets the wheel and vertical swipes scroll the page around the frame, and does not count a page view. Change it with the home page in mind. `/explorer/?embed#map.<state>.<approach>` is the Map view alone, with a key to every system. Inside a frame, a click chooses a system and posts `{ type: "explorer:select", approach }` to the page, which the library home page uses to show that system in its 3-D frame; opened by itself, the lines are links into the full explorer.
 
 The footer's newsletter sign-up and every **Suggest a correction** button (the source sheet, an organization's panel, the line under the page) use the library's forms. The sign-up posts to `/api/subscribe` on this host, which the library's Worker answers; `src/forms.ts` is a copy of `library-site/src/lib/forms.js`. A correction button opens the library's Suggest or correct form, filled in with the item. A person reads every suggestion; nothing changes the workbook by itself. The workbook's `footer.issue` and `footer.issue.url` rows in UI Text are no longer read.
 

@@ -2,7 +2,7 @@ import { correctionHref } from "../forms";
 import { AMAP, APPROACHES, CAT, D, LN, MAIN_LAYERS, SRC, approachLabel, heldCount, isBundled, ordered, ui } from "../data";
 import { nav, syncHash } from "../router";
 import { Stage } from "../stage";
-import { RM, S, type View } from "../state";
+import { EMBED, RM, S, type View } from "../state";
 import { $, FLOW_DESC, FLOW_NAMES, STATUSES, esc, layerList, lineSwatch, logo, logoStrip, openSource, overlay, rich, statusChip, statusDesc, toast } from "../ui";
 import type { ApproachView, FlowType } from "../types";
 import { readKeyHtml } from "./start";
@@ -58,6 +58,8 @@ export function showExplore() {
   }
   sync();
   stage.ok && stage.start();
+  // ?embed: show the frame once the first frame of the stage has been painted (index.html).
+  if (EMBED) requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.add("ready")));
 }
 export const hideExplore = () => stage?.stop();
 
@@ -77,7 +79,7 @@ function sync() {
   document.querySelectorAll<HTMLInputElement>("[data-flow]").forEach((i) => (i.checked = !!S.flows[i.dataset.flow as FlowType]));
   $<HTMLInputElement>("#optBundling").checked = S.bundling; $<HTMLInputElement>("#optLabels").checked = S.labels;
   const a = AMAP[S.approach];
-  $("#stageTitle").innerHTML = `<b>${esc(a.name)}</b>${esc(a.kind)} · ${VIEWS[S.view][0]}`;
+  $("#stageTitle").innerHTML = `${EMBED && a.logo.length ? logo(a.logo, a.tag) : ""}<b>${esc(a.name)}</b>${esc(a.kind)} · ${VIEWS[S.view][0]}`;
   const on = (Object.keys(S.flows) as FlowType[]).filter((k) => S.flows[k]);
   $("#legend").innerHTML = on.length ? on.map((k) => lineSwatch(k) + `<span>${FLOW_NAMES[k]}</span>`).join("") : `<span style="grid-column:1/-1">No flows shown</span>`;
   $("#stageHint").textContent = RM ? "Drag to turn · Scroll to zoom · Motion reduced" : "Drag to turn · Scroll to zoom";

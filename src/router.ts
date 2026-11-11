@@ -1,8 +1,8 @@
 import { AMAP, JMAP, CAT } from "./data";
-import { S, type Tab, type View } from "./state";
+import { EMBED, S, type Tab, type View } from "./state";
 import type { FlowType } from "./types";
 
-const TABS: Tab[] = ["start", "explore", "journeys", "compare", "stakeholders", "spectrum", "changelog"];
+const TABS: Tab[] = ["start", "explore", "map", "journeys", "compare", "stakeholders", "spectrum", "changelog"];
 const FLOW_LETTERS: [FlowType, string][] = [["request", "r"], ["money", "m"], ["control", "c"], ["location", "l"]];
 
 /** Navigation hooks, wired up in main.ts so views can move between tabs without import cycles. */
@@ -21,6 +21,7 @@ export function encodeHash(): string {
     case "journeys": return `journeys.${S.journey}.${S.step + 1}`;
     case "compare": return `compare.${S.compare.join("-") || "none"}`;
     case "stakeholders": return `stakeholders.${S.stake}`;
+    case "map": return `map.${S.mapState}${S.mapPick ? "." + S.mapPick : ""}`;
     default: return S.tab;
   }
 }
@@ -31,6 +32,11 @@ export function parseHash() {
   if ((TABS as string[]).includes(p[0])) S.tab = p[0] as Tab;
   if (p[0] === "explore") {
     if (AMAP[p[1]]) S.approach = p[1];
+    // #explore.random: the library home page's frames. ?pick=N makes two frames choose the same approach.
+    if (p[1] === "random") {
+      const ids = Object.keys(AMAP), n = parseInt(new URLSearchParams(location.search).get("pick") ?? "", 10);
+      S.approach = ids[(isNaN(n) ? Math.floor(Math.random() * ids.length) : Math.abs(n)) % ids.length];
+    }
     if (p[2] === "strata" || p[2] === "constellation") S.view = p[2] as View;
     if (p[3]) { FLOW_LETTERS.forEach(([k, l]) => (S.flows[k] = p[3].includes(l))); S.bundling = p[3].includes("b"); }
   }
@@ -40,10 +46,12 @@ export function parseHash() {
   }
   if (p[0] === "compare" && p[1]) S.compare = p[1].split("-").filter((id) => AMAP[id]).slice(0, 3);
   if (p[0] === "stakeholders" && CAT[p[1]]) S.stake = p[1];
+  if (p[0] === "map" && p[1]) { S.mapState = p[1]; if (AMAP[p[2]]) S.mapPick = p[2]; } // a state's name as a slug (the Map view checks it), then the embed's chosen system
 }
 /** Page view for GoatCounter. Counts tab, approach, journey and stakeholder, not view or flow toggles. */
 let lastPath = "";
 function countView() {
+  if (EMBED) return; // a home page visit, not an explorer view
   const path = "/" + (S.tab === "explore" ? `explore/${S.approach}` : S.tab === "journeys" ? `journeys/${S.journey}` : S.tab === "stakeholders" ? `stakeholders/${S.stake}` : S.tab);
   if (path === lastPath) return;
   try {
