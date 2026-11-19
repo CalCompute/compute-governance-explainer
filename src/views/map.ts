@@ -47,7 +47,7 @@ export function renderMap() {
     const text = list.map((a) => a.tag).join(" · "), w = text.length * 7 + 14;
     return `<g class="map-pin${s.name === sel ? " sel" : ""}" aria-hidden="true"><rect x="${s.x - w / 2}" y="${s.y - 10}" width="${w}" height="20" rx="10"/><text x="${s.x}" y="${s.y + 4.5}" text-anchor="middle">${esc(text)}</text></g>`;
   };
-  const drawn = [...usMap.states].sort((a, b) => Number(a.name === sel) - Number(b.name === sel) || Number(byState.has(a.name)) - Number(byState.has(b.name)));
+  const drawn = usMap.states.toSorted((a, b) => Number(a.name === sel) - Number(b.name === sel) || Number(byState.has(a.name)) - Number(byState.has(b.name)));
   const svg = `<svg class="us-map" viewBox="0 0 ${usMap.width} ${usMap.height}" role="group" aria-label="${esc(ui("map.aria", "Map of the United States. The states with a documented system are buttons; the list beside the map gives the same choices."))}">${drawn.map(shape).join("")}${usMap.states.map(label).join("")}</svg>`;
 
   // ?embed#map: the library home page's frame. The map and a key to every system. Inside a frame, a click chooses a
@@ -62,7 +62,7 @@ export function renderMap() {
     const key = states.flatMap((n) => byState.get(n)!.map((a) => line(a, n))).join("")
       + group(ui("map.national", "National"), national, () => "U.S.")
       + group(ui("map.abroad", "Outside the United States"), abroad, (a) => a.location);
-    const linked = [...usMap.states].sort((a, b) => Number(a.name === chosenState) - Number(b.name === chosenState) || Number(byState.has(a.name)) - Number(byState.has(b.name))).map((s) => {
+    const linked = usMap.states.toSorted((a, b) => Number(a.name === chosenState) - Number(b.name === chosenState) || Number(byState.has(a.name)) - Number(byState.has(b.name))).map((s) => {
       const list = byState.get(s.name);
       if (!list) return `<path class="st" d="${s.d}" aria-hidden="true"/>`;
       const names = `${s.name}: ${list.map((a) => a.name).join(", ")}`;

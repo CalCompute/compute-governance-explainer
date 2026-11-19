@@ -21,7 +21,7 @@ export function initials(name: string): string {
 
 export function runsOf(layers: number[]): [number, number][] {
   const runs: [number, number][] = [];
-  [...layers].sort((a, b) => a - b).forEach((n) => {
+  layers.toSorted((a, b) => a - b).forEach((n) => {
     const r = runs[runs.length - 1];
     if (r && n === r[1] + 1) r[1] = n; else runs.push([n, n]);
   });
@@ -53,7 +53,7 @@ function build(): Record<string, ApproachView> {
 }
 export const AMAP = build();
 export const APPROACHES = D.approaches.map((a) => AMAP[a.id]);
-export const ordered = (a: ApproachView) => [...a.ents].sort((x, y) => x.layers[0] - y.layers[0] || x.name.localeCompare(y.name));
+export const ordered = (a: ApproachView) => a.ents.toSorted((x, y) => x.layers[0] - y.layers[0] || x.name.localeCompare(y.name));
 export const approachLabel = (a: ApproachView) => (a.group === "core" ? (a.parentId ? "Variant " : "Approach ") : "Contrast case ") + a.tag;
 
 /** Facts and flows anywhere in the dataset that cite a source. */

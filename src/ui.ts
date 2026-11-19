@@ -71,7 +71,7 @@ export function overlay(html: string, label: string, kind: "sheet" | "modal") {
   root.querySelector<HTMLElement>("button")?.focus();
 }
 export function closeOverlay() {
-  $("#overlayRoot").innerHTML = "";
+  $("#overlayRoot").replaceChildren();
   lastFocus?.focus?.();
 }
 export const overlayOpen = () => !!$("#overlayRoot").innerHTML;

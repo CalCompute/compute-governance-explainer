@@ -19,7 +19,7 @@ export function renderCompare() {
   };
   $("#cmpNote").textContent = S.compare.length >= 3 ? "Three selected. Remove one to add another." : S.compare.length ? `${S.compare.length} selected. You can add ${3 - S.compare.length} more.` : "Select an approach to begin.";
   const sel = S.compare.map((id) => AMAP[id]);
-  if (!sel.length) { $("#cmpGrid").innerHTML = ""; $("#cmpSummary").innerHTML = ""; return; }
+  if (!sel.length) { $("#cmpGrid").replaceChildren(); $("#cmpSummary").replaceChildren(); return; }
   const diff = (L: number) => { const sets = sel.map((a) => a.ents.filter((e) => e.layers.includes(L)).map((e) => e.category).sort().join(",")); return sets.some((s) => s !== sets[0]); };
   let html = `<div class="cmp" style="grid-template-columns:200px repeat(${sel.length},minmax(190px,1fr))">`;
   html += `<div class="cmp-cell-h">Layer</div>` + sel.map((a) => `<div class="cmp-cell-h"><div class="row">${logo(a.logo, a.tag)}<b>${esc(a.tag)} · ${esc(a.name)}</b></div><span>${esc(a.kind)}</span></div>`).join("");
@@ -89,8 +89,8 @@ export function renderSpectrum() {
   box.insertAdjacentHTML("afterbegin", stems);
   box.style.minHeight = `${Math.max(380, 260 + (maxRow + 1) * 40)}px`;
   box.onclick = (e) => { const b = (e.target as HTMLElement).closest<HTMLElement>("[data-open]"); if (b) nav.openApproach(b.dataset.open!); };
-  $("#specTable").innerHTML = `<thead><tr><th scope="col">Approach</th><th scope="col">Organizations holding layers 2–8</th><th scope="col">Most-bundled organization</th></tr></thead><tbody>${[...APPROACHES].sort((p, q) => p.holders - q.holders).map((a) => {
-    const top = [...a.ents].sort((p, q) => heldCount(q) - heldCount(p))[0];
+  $("#specTable").innerHTML = `<thead><tr><th scope="col">Approach</th><th scope="col">Organizations holding layers 2–8</th><th scope="col">Most-bundled organization</th></tr></thead><tbody>${APPROACHES.toSorted((p, q) => p.holders - q.holders).map((a) => {
+    const top = a.ents.toSorted((p, q) => heldCount(q) - heldCount(p))[0];
     return `<tr><td><div class="holder">${logo(a.logo, a.tag)}<span>${esc(approachLabel(a))} · ${esc(a.name)}</span></div></td><td class="num">${a.holders}</td><td>${esc(top.name)} (${heldCount(top)} layer${heldCount(top) === 1 ? "" : "s"}: ${esc(top.layers.filter((L) => L <= 8).map((L) => LN(L).name).join(", "))})</td></tr>`;
   }).join("")}</tbody>`;
 }
