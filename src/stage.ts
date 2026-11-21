@@ -333,7 +333,7 @@ export class Stage {
       o.parts.forEach((p, i) => {
         const tt = RM ? (i + 1) / (o.parts.length + 1) : (time * o.speed + i / o.parts.length) % 1;
         o.curve.getPoint(tt, p.position);
-        if (o.f.type !== "request") { p.rotation.y = time * 1.5; p.rotation.x = time; }
+        if (!RM && o.f.type !== "request") { p.rotation.y = time * 1.5; p.rotation.x = time; }
       });
     });
   }

@@ -36,6 +36,7 @@
 <style>html.embed body { opacity: 0 } html.embed.ready body { opacity: 1; transition: opacity .3s } @media (prefers-reduced-motion: reduce) { html.embed.ready body { transition: none } }</style>
 </head>
 <body>
+<a class="skip-link" href="#main">Skip to content</a>
 <!-- The Research Library's header and footer: a copy of CalCompute/library-site src/layouts/Layout.astro (see src/chrome.css). -->
 <header class="lib-header">
   <div class="lib-header-inner">
@@ -70,10 +71,10 @@
   <form method="get" action="https://research.californiacompute.org/search/" role="search">
     <input name="q" type="search" autocomplete="off" spellcheck="false" placeholder="Search the library" aria-label="Search the library">
   </form>
-  <p>Enter searches the library · Esc closes</p>
+  <p>Enter searches the library. Esc closes.</p>
 </dialog>
 
-<main class="lib-main">
+<main id="main" class="lib-main">
 <div class="explorer">
   <div class="bar"><div class="bar-inner">
     <span class="brand">Compute Governance Explorer</span>
@@ -88,7 +89,7 @@
       <button class="tab" role="tab" data-tab="changelog" aria-controls="tab-changelog">Changelog</button>
     </nav>
     <div class="bar-meta">
-      <button class="btn" id="copyLinkBtn" type="button"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M7 4.5l1.2-1.2a2.6 2.6 0 013.7 3.7L10.7 8.2M9 11.5l-1.2 1.2a2.6 2.6 0 01-3.7-3.7L5.3 7.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Copy link</button>
+      <button class="btn" id="copyLinkBtn" type="button" aria-label="Copy link"><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M6.5 9.5l3-3M7 4.5l1.2-1.2a2.6 2.6 0 013.7 3.7L10.7 8.2M9 11.5l-1.2 1.2a2.6 2.6 0 01-3.7-3.7L5.3 7.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span>Copy link</span></button>
     </div>
   </div></div>
   <div class="notice"><div class="notice-inner"><span data-ui="notice"></span><span class="verified" id="verifiedLine"></span></div></div>
@@ -132,7 +133,7 @@
           <div class="stage-labels" id="stageLabels" aria-hidden="true"></div>
           <div class="stage-head"><div class="stage-title" id="stageTitle"></div></div>
           <div class="legend" id="legend" aria-hidden="true"></div>
-          <div class="stage-hint" id="stageHint" aria-hidden="true">Drag to turn · Scroll to zoom</div>
+          <div class="stage-hint" id="stageHint" aria-hidden="true">Drag or swipe to turn, scroll or pinch to zoom</div>
           <div class="tip" id="tip" hidden></div>
         </div>
         <aside class="panel panel-right" id="drawer" aria-label="Detail" aria-live="polite"></aside>

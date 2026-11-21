@@ -31,7 +31,7 @@ export function renderStart() {
   built = true;
   const el = $("#startBody");
   const stack = D.layers.map((l) => `<li class="srow" style="--i:${l.order - 1}"><span class="snum">${l.order}</span><span class="sname">${esc(l.name)}</span><span class="sq">${esc(l.question)}</span></li>`).join("");
-  const ways = WAYS.map(([tab, k]) => `<button type="button" class="way" data-go="${tab}"><b>${esc(ui(`start.ways.${k}.title`))}</b><span>${esc(ui(`start.ways.${k}.text`))}</span><span class="way-go" aria-hidden="true">${esc(ui("start.go", "Open"))} →</span></button>`).join("");
+  const ways = WAYS.map(([tab, k]) => `<button type="button" class="way" data-go="${tab}"><b>${esc(ui(`start.ways.${k}.title`))}</b><span>${esc(ui(`start.ways.${k}.text`))}</span><span class="way-go" aria-hidden="true">${esc(ui("start.go", "Open"))}</span></button>`).join("");
   const tiles = (group: "core" | "contrast") => APPROACHES.filter((a) => a.group === group).map((a) => `<button type="button" class="atile${a.parentId ? " variant" : ""}" data-open="${a.id}">${logo(a.logo, a.tag)}<span><span class="muted">${esc(approachLabel(a))}</span><b>${esc(a.name)}</b><span class="meta">${esc(a.location)}</span></span></button>`).join("");
   el.innerHTML = `
     <div class="page-head"><h1>${esc(ui("start.title", "Start here"))}</h1><p class="lead">${rich(ui("start.purpose"))}</p></div>

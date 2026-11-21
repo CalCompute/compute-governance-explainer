@@ -50,7 +50,7 @@ export function showExplore() {
   if (!stage) {
     stage = new Stage(host, $("#stageLabels"), $("#tip"));
     stage.onPick = select;
-    if (!stage.ok) host.insertAdjacentHTML("beforeend", `<div class="fallback"><div><h3>The 3-D view needs WebGL</h3><p>This browser has WebGL turned off. The detail panel, Compare, Stakeholders and Journeys still work.</p></div></div>`);
+    if (!stage.ok) host.insertAdjacentHTML("beforeend", `<div class="fallback"><div><h3>The 3-D view needs WebGL</h3><p>This browser has WebGL turned off. The detail panel, Map, Compare, Stakeholders and Journeys still work.</p></div></div>`);
     else { stage.view = S.view; stage.a = AMAP[S.approach]; stage.setView(S.view); stage.snapCamera(); }
   } else if (stage.ok) {
     if (stage.view !== S.view) stage.setView(S.view);
@@ -82,7 +82,7 @@ function sync() {
   $("#stageTitle").innerHTML = `${EMBED && a.logo.length ? logo(a.logo, a.tag) : ""}<b>${esc(a.name)}</b>${esc(a.kind)} · ${VIEWS[S.view][0]}`;
   const on = (Object.keys(S.flows) as FlowType[]).filter((k) => S.flows[k]);
   $("#legend").innerHTML = on.length ? on.map((k) => lineSwatch(k) + `<span>${FLOW_NAMES[k]}</span>`).join("") : `<span style="grid-column:1/-1">No flows shown</span>`;
-  $("#stageHint").textContent = RM ? "Drag to turn · Scroll to zoom · Motion reduced" : "Drag to turn · Scroll to zoom";
+  $("#stageHint").textContent = RM ? "Drag or swipe to turn, scroll or pinch to zoom. Motion is reduced." : "Drag or swipe to turn, scroll or pinch to zoom";
   renderDrawer();
   if (S.tab === "explore") syncHash();
 }
